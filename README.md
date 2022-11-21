@@ -6,6 +6,9 @@ and thank's to <a href="https://github.com/rizkymashudi/rmwashere">rizkymashudi 
 
 thank's for they code to help me 
 
+![Design](design.png)
+
 terimakasih untuk yang sudah bergabung di github saya 
 selamat datang dan
 mari belajar bersama 
+
