@@ -157,6 +157,20 @@ a{
     text-decoration: none;
 }
 
+a:visited {
+  color: none;
+}
+
+/* mouse over link */
+a:hover {
+  color: none;
+}
+
+/* selected link */
+a:active {
+  color: none;
+}
+
 img{
     max-width: 100%;
     height: auto;
