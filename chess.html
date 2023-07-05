@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chess Game</title>
+    <link rel="stylesheet" href="chessboard-1.0.0.css" />
+    <style>
+        #board {
+            width: 400px;
+        }
+    </style>
+</head>
+<body>
+    <div id="board"></div>
+    <script src="chessboard-1.0.0.js"></script>
+    <script src="chessboard-1.0.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.2/chess.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stockfish/14.1.0/stockfish.js"></script>
+    <script>
+        var board = Chessboard('board', 'start');
+        var game = new Chess();
+        var stockfish = STOCKFISH();
+
+        // Fungsi untuk mengeksekusi langkah catur
+        function makeMove() {
+            // Dapatkan langkah dari input
+            var move = document.getElementById('moveInput').value;
+
+            // Lakukan langkah pada papan catur
+            var result = game.move(move);
+
+            // Periksa apakah langkah valid
+            if (result === null) {
+                alert('Langkah tidak valid!');
+            } else {
+                board.position(game.fen());
+
+                // Periksa apakah permainan telah selesai
+                if (game.game_over()) {
+                    alert('Permainan selesai!');
+                } else {
+                    // Giliran komputer
+                    var bestMove = getStockfishMove();
+                    game.move(bestMove);
+                    board.position(game.fen());
+                }
+            }
+        }
+
+        // Fungsi untuk mendapatkan langkah terbaik dari Stockfish
+        function getStockfishMove() {
+            stockfish.postMessage('position fen ' + game.fen());
+            stockfish.postMessage('go depth 1');
+        }
+
+        stockfish.onmessage = function (event) {
+            if (event && typeof event === 'object') {
+                var message = event.data;
+
+                // Cek jika ada langkah terbaik yang dikembalikan oleh Stockfish
+                if (message.startsWith('bestmove')) {
+                    var bestMove = message.split(' ')[1];
+                    makeMove(bestMove);
+                }
+            }
+        };
+    </script>
+</body>
+</html>
