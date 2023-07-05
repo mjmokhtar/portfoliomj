@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chess Game</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chessboard.js/1.0.0/chessboard.min.css" />
+    <style>
+        #board {
+            width: 400px;
+        }
+    </style>
+</head>
+<body>
+    <div id="board"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chessboard.js/1.0.0/chessboard.min.js"></script>
+    <script>
+        var board = Chessboard('board', 'start');
+
+        // Fungsi untuk mengeksekusi langkah catur
+        function makeMove() {
+            // Dapatkan langkah dari input
+            var move = document.getElementById('moveInput').value;
+
+            // Lakukan langkah pada papan catur
+            var result = board.move(move);
+
+            // Periksa apakah langkah valid
+            if (result === null) {
+                alert('Langkah tidak valid!');
+            } else {
+                // Periksa apakah permainan telah selesai
+                if (board.game_over()) {
+                    alert('Permainan selesai!');
+                }
+            }
+        }
+    </script>
+</body>
+</html>
