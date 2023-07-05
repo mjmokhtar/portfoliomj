@@ -11,10 +11,14 @@
 </head>
 <body>
     <div id="board"></div>
+    <input type="text" id="moveInput" placeholder="Masukkan langkah" />
+    <button onclick="makeMove()">Jalankan Langkah</button>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.2/chess.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chessboard.js/1.0.0/chessboard.min.js"></script>
     <script>
         var board = Chessboard('board', 'start');
+        var game = new Chess();
 
         // Fungsi untuk mengeksekusi langkah catur
         function makeMove() {
@@ -22,14 +26,16 @@
             var move = document.getElementById('moveInput').value;
 
             // Lakukan langkah pada papan catur
-            var result = board.move(move);
+            var result = game.move(move);
 
             // Periksa apakah langkah valid
             if (result === null) {
                 alert('Langkah tidak valid!');
             } else {
+                board.position(game.fen());
+
                 // Periksa apakah permainan telah selesai
-                if (board.game_over()) {
+                if (game.game_over()) {
                     alert('Permainan selesai!');
                 }
             }
