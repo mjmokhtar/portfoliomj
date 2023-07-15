@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dinosaur Game</title>
+  <style>
+    #game-container {
+      position: relative;
+      width: 800px;
+      height: 400px;
+      border: 1px solid #000;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+
+    #dinosaur {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      background-color: #000;
+      bottom: 0;
+      left: 50px;
+    }
+
+    #cactus {
+      position: absolute;
+      width: 20px;
+      height: 40px;
+      background-color: #000;
+      bottom: 0;
+    }
+  </style>
+</head>
+<body>
+  <div id="game-container">
+    <div id="dinosaur"></div>
+    <div id="cactus"></div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const dinosaur = document.getElementById('dinosaur');
+      const cactus = document.getElementById('cactus');
+      let isJumping = false;
+
+      function jump() {
+        if (!isJumping) {
+          isJumping = true;
+          let position = 0;
+          const jumpInterval = setInterval(function() {
+            if (position === 150) {
+              clearInterval(jumpInterval);
+              let downInterval = setInterval(function() {
+                if (position === 0) {
+                  clearInterval(downInterval);
+                  isJumping = false;
+                }
+                position -= 10;
+                dinosaur.style.bottom = position + 'px';
+              }, 20);
+            }
+            position += 10;
+            dinosaur.style.bottom = position + 'px';
+          }, 20);
+        }
+      }
+
+      function checkCollision() {
+        const dinosaurRect = dinosaur.getBoundingClientRect();
+        const cactusRect = cactus.getBoundingClientRect();
+        return !(
+          dinosaurRect.bottom < cactusRect.top ||
+          dinosaurRect.top > cactusRect.bottom ||
+          dinosaurRect.right < cactusRect.left ||
+          dinosaurRect.left > cactusRect.right
+        );
+      }
+
+      function gameLoop() {
+        const gameContainer = document.getElementById('game-container');
+        let score = 0;
+        let cactusPosition = gameContainer.clientWidth;
+
+        function moveCactus() {
+          cactusPosition -= 10;
+          cactus.style.left = cactusPosition + 'px';
+          if (cactusPosition < 0) {
+            cactusPosition = gameContainer.clientWidth;
+            score++;
+          }
+        }
+
+        const gameInterval = setInterval(function() {
+          if (checkCollision()) {
+            clearInterval(gameInterval);
+            alert('Game Over! Your score: ' + score);
+            location.reload();
+          }
+          moveCactus();
+        }, 20);
+
+        document.addEventListener('keydown', function(event) {
+          if (event.keyCode === 32 || event.keyCode === 38) {
+            jump();
+          }
+        });
+      }
+
+      gameLoop();
+    });
+  </script>
+</body>
+</html>
